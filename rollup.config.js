@@ -1,16 +1,13 @@
 import svelte from "rollup-plugin-svelte";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import json from '@rollup/plugin-json';
-import replace from '@rollup/plugin-replace';
+import json from "@rollup/plugin-json";
+import replace from "@rollup/plugin-replace";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import postcss from "rollup-plugin-postcss";
-import path from  'path';
-import {config} from 'dotenv';
-
-
-
+import path from "path";
+import { config } from "dotenv";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -40,22 +37,24 @@ function serve() {
 }
 
 const postcssOptions = () => ({
-extensions: ['.scss', '.sass'],
-extract: false,
-minimize: true,
-use: [
-	['sass', {
-	includePaths: [
-		'./src/theme',
-		'./node_modules',
-		// This is only needed because we're using a local module. :-/
-		// Normally, you would not need this line.
-		path.resolve(__dirname, '..', 'node_modules')
-	]
-	}]
-]
+  extensions: [".scss", ".sass"],
+  extract: false,
+  minimize: true,
+  use: [
+    [
+      "sass",
+      {
+        includePaths: [
+          "./src/theme",
+          "./node_modules",
+          // This is only needed because we're using a local module. :-/
+          // Normally, you would not need this line.
+          path.resolve(__dirname, "..", "node_modules"),
+        ],
+      },
+    ],
+  ],
 });
-  
 
 export default {
   input: "src/main.js",
@@ -88,12 +87,12 @@ export default {
     commonjs(),
     json(),
     replace({
-      // stringify the object       
+      // stringify the object
       __myapp: JSON.stringify({
         env: {
-          API_URL : process.env.API_URL,
-          ...config().parsed
-        }
+          API_URL: process.env.API_URL,
+          ...config().parsed,
+        },
       }),
     }),
     postcss(postcssOptions()),
