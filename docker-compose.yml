@@ -1,0 +1,17 @@
+version: '2.1'
+
+services:
+  web:
+    build:
+      context: .
+    restart: always
+    ports:
+      - 8000:80
+  db:
+    image: vimagick/json-server
+    restart: always
+    command: -H 0.0.0.0 -p 3000 -w /data/db.json
+    volumes:
+    - ./db-server/data:/data
+    ports:
+      - 3000:3000
