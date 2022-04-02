@@ -19,7 +19,6 @@
       const r = await fetch(`/selected?date=${date}`);
       if (r.status === 200) {
         const j = await r.json();
-        console.log(j);
         selected = {};
         j.map((d) => {
           selected[d.target] = d.user;
@@ -27,7 +26,6 @@
       }
     } catch (e) {
       alert("无法连接数据库");
-      console.log(e);
       clearInterval(interval);
     }
   };
@@ -47,7 +45,6 @@
       });
       if (r.status === 200) {
         const j = await r.json();
-        console.log(j);
       }
     } else {
       const date = dateFormat(new Date(), "yyyy-mm-dd");
@@ -64,7 +61,6 @@
       });
       if (r.status === 200) {
         const j = await r.json();
-        console.log(j);
       }
     }
   };
@@ -87,7 +83,6 @@
       const r = await fetch(`/comments`);
       if (r.status === 200) {
         const j = await r.json();
-        console.log(j);
         comments = {};
         j.map((d) => {
           comments[d.target] = d.score;
@@ -117,7 +112,6 @@
       });
       if (r.status === 200) {
         const j = await r.json();
-        console.log(j);
       }
     } else {
       const r = await fetch(`/comments`, {
@@ -132,7 +126,6 @@
       });
       if (r.status === 200) {
         const j = await r.json();
-        console.log(j);
       }
     }
   };

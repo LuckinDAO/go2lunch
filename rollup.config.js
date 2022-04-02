@@ -86,7 +86,7 @@ export default {
       // stringify the object
       __myapp: JSON.stringify({
         env: {
-          API_URL: process.env.API_URL,
+          TARGET: process.env.TARGET,
           ...config().parsed,
         },
       }),
