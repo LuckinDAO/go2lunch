@@ -4,7 +4,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "node server.js"
+    "start": "node api/server.js"
   },
   "license": "Apache-2.0",
   "devDependencies": {

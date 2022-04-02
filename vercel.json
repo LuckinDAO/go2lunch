@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "builds": [{ "src": "server.js", "use": "@now/node" }],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/"
+  "rewrites": [{ "source": "/(.*)", "destination": "api/server.js" }],
+  "functions": {
+    "api/server.js": {
+      "memory": 3008,
+      "maxDuration": 10
     }
-  ]
+  }
 }
