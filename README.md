@@ -1,11 +1,21 @@
-# go2lunch
+# go2lunch 
 
-## quickstart
+![Vercel](https://vercelbadge.vercel.app/api/ciiiii/notion-blog?style=for-the-badge)
+
+## Quickstart
+### Develop
 ```bash
-# 1. json server
-yarn global add json-server
-json-server --watch ./db-server/data/db.json
-# 2. web
+# 1. install dependencies
 yarn
+# 2. start server
 yarn run dev
+```
+### Production
+```bash
+# 1. install dependencies
+yarn
+# 2. build svelte
+yarn build
+# 3. start server
+node api/server.js
 ```
