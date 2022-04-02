@@ -16,7 +16,7 @@
   const getSelects = async () => {
     const date = dateFormat(new Date(), "yyyy-mm-dd");
     try {
-      const r = await fetch(`${__myapp.env.API_URL}/selected?date=${date}`);
+      const r = await fetch(`/selected?date=${date}`);
       if (r.status === 200) {
         const j = await r.json();
         console.log(j);
@@ -33,9 +33,7 @@
   };
   const getSelect = async (target) => {
     const date = dateFormat(new Date(), "yyyy-mm-dd");
-    const r = await fetch(
-      `${__myapp.env.API_URL}/selected?date=${date}&target=${target}`
-    );
+    const r = await fetch(`/selected?date=${date}&target=${target}`);
     if (r.status === 200) {
       const j = await r.json();
       return j;
@@ -43,20 +41,17 @@
   };
   const updateSelect = async (target, user) => {
     const existRecord = await getSelect(target);
-    if (existRecord.length !== 0) {
-      const r = await fetch(
-        `${__myapp.env.API_URL}/selected/${existRecord[0].id}`,
-        {
-          method: "DELETE",
-        }
-      );
+    if (existRecord && existRecord.length !== 0) {
+      const r = await fetch(`/selected/${existRecord[0].id}`, {
+        method: "DELETE",
+      });
       if (r.status === 200) {
         const j = await r.json();
         console.log(j);
       }
     } else {
       const date = dateFormat(new Date(), "yyyy-mm-dd");
-      const r = await fetch(`${__myapp.env.API_URL}/selected`, {
+      const r = await fetch(`/selected`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +76,7 @@
     }
   };
   const getComment = async (target) => {
-    const r = await fetch(`${__myapp.env.API_URL}/comments?target=${target}`);
+    const r = await fetch(`/comments?target=${target}`);
     if (r.status === 200) {
       const j = await r.json();
       return j;
@@ -89,7 +84,7 @@
   };
   const getComments = async () => {
     try {
-      const r = await fetch(`${__myapp.env.API_URL}/comments`);
+      const r = await fetch(`/comments`);
       if (r.status === 200) {
         const j = await r.json();
         console.log(j);
@@ -110,25 +105,22 @@
       score = 0 + score;
     }
     if (existRecord.length != 0) {
-      const r = await fetch(
-        `${__myapp.env.API_URL}/comments/${existRecord[0].id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            target,
-            score,
-          }),
-        }
-      );
+      const r = await fetch(`/comments/${existRecord[0].id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          target,
+          score,
+        }),
+      });
       if (r.status === 200) {
         const j = await r.json();
         console.log(j);
       }
     } else {
-      const r = await fetch(`${__myapp.env.API_URL}/comments`, {
+      const r = await fetch(`/comments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -161,23 +153,8 @@
   let top = 0.1;
   let threshold = 0.5;
   let bottom = 0.9;
+  let target = __myapp.env.TARGET;
 </script>
-
-<style>
-  main {
-    text-align: center;
-    /* padding: 1em;
-		margin: 0 auto; */
-    /* max-width: 240px; */
-  }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
-</style>
 
 <main>
   <Scroller
@@ -187,7 +164,8 @@
     bind:count
     bind:index
     bind:offset
-    bind:progress>
+    bind:progress
+  >
     <div slot="background">
       <div style="position: absolute;top: 0;left: 0;">
         汇总:
@@ -195,7 +173,9 @@
           {#each Object.keys(selected) as k}
             <Item>
               <Text>
-                {data.filter((i) => i.id == k)[0].name}-{data.filter((i) => i.id == k)[0].price}-{selected[k]}
+                {data.filter((i) => i.id == k)[0].name}-{data.filter(
+                  (i) => i.id == k
+                )[0].price}-{selected[k]}
               </Text>
             </Item>
             <Separator />
@@ -207,12 +187,13 @@
       <h1>中午点菜</h1>
       <div style="padding: 0">
         选择你是谁
-        {#each ['蔡', '勋', '程', '杜', '姜', '何'] as u}
+        {#each target.split("") as u}
           <FormField>
             <Radio
               bind:group={self}
               value={u}
-              on:change={() => localStorage.setItem('user', u)} />
+              on:change={() => localStorage.setItem("user", u)}
+            />
             <span slot="label">{u}</span>
           </FormField>
         {/each}
@@ -248,20 +229,23 @@
               <Cell>
                 <Button
                   variant="outlined"
-                  color={selected[item.id] === undefined ? '' : 'secondary'}
-                  on:click={() => handleSelect(item.id)}>
+                  color={selected[item.id] === undefined ? "" : "secondary"}
+                  on:click={() => handleSelect(item.id)}
+                >
                   {#if selected[item.id]}取消{:else}点菜{/if}
                 </Button>
               </Cell>
               <Cell>
                 <IconButton
                   class="material-icons"
-                  on:click={() => updateComment(index, 1)}>
+                  on:click={() => updateComment(index, 1)}
+                >
                   thumb_up
                 </IconButton>
                 <IconButton
                   class="material-icons"
-                  on:click={() => updateComment(index, -1)}>
+                  on:click={() => updateComment(index, -1)}
+                >
                   thumb_down
                 </IconButton>
               </Cell>
@@ -272,3 +256,19 @@
     </div>
   </Scroller>
 </main>
+
+<style>
+  main {
+    text-align: center;
+    /* padding: 1em;
+		margin: 0 auto; */
+    /* max-width: 240px; */
+  }
+
+  h1 {
+    color: #ff3e00;
+    text-transform: uppercase;
+    font-size: 4em;
+    font-weight: 100;
+  }
+</style>
